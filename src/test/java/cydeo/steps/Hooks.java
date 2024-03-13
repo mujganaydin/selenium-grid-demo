@@ -13,13 +13,13 @@ import org.openqa.selenium.TakesScreenshot;
 public class Hooks {
 
     @Before
-    public void setupMethod(){
+    public void setupMethod() {
         Driver.getDriver().get(ConfigurationReader.getProperty("etsyUrl"));
     }
 
 
     @After
-    public void teardownMethod(Scenario scenario){
+    public void teardownMethod(Scenario scenario) {
 
         if (scenario.isFailed()) {
 

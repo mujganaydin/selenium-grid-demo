@@ -1,27 +1,18 @@
 package cydeo.steps;
 
-import static org.junit.Assert.fail;
-
 import cydeo.pages.EtsyPage;
 import cydeo.utilities.BrowserUtils;
 import cydeo.utilities.Driver;
-import io.cucumber.java.After;
-import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-
-import java.util.concurrent.TimeUnit;
 
 
 public class StepDefs {
 
-    EtsyPage etsy=new EtsyPage();
+    EtsyPage etsy = new EtsyPage();
 
     @Given("^I am on the home page$")
     public void i_am_on_the_home_page() throws Throwable {
@@ -31,7 +22,7 @@ public class StepDefs {
         System.out.println("*** URL is OPENED THROUGH THE HOOK CLASS******");
         System.out.println("**********************************************");
         BrowserUtils.waitFor(2);
-         Driver.getDriver().navigate().refresh(); // US Student -->
+        Driver.getDriver().navigate().refresh(); // US Student -->
         BrowserUtils.waitFor(2);
         // etsy.accept.click(); //  EU Student
         BrowserUtils.waitFor(2);

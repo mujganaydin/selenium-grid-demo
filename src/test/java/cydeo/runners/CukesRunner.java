@@ -7,12 +7,13 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions(
         plugin = {
-                "json:target/cucumber.json" ,
+                "json:target/cucumber.json",
                 "html:target/cucumber-reports.html",
                 "me.jvt.cucumber.report.PrettyReports:target/cucumber",
-                },
+        },
         features = "src/test/resources/features",
         glue = "cydeo/steps",
         publish = true
 )
-public class CukesRunner {}
+public class CukesRunner {
+}

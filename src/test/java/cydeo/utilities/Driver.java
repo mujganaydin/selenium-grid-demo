@@ -4,9 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URL;
@@ -14,8 +12,7 @@ import java.time.Duration;
 
 public class Driver {
 
-    //create a private constructor to remove access to this object
-    private Driver(){}
+    private static InheritableThreadLocal<WebDriver> driverPool = new InheritableThreadLocal<>();
 
     /*
     We make the WebDriver private, because we want to close access from outside the class.
@@ -23,21 +20,23 @@ public class Driver {
      */
     //private static WebDriver driver; // default value = null
 
-    private static InheritableThreadLocal<WebDriver> driverPool = new InheritableThreadLocal<>();
+    //create a private constructor to remove access to this object
+    private Driver() {
+    }
 
     /*
     Create a re-usable utility method which will return the same driver instance once we call it.
     - If an instance doesn't exist, it will create first, and then it will always return same instance.
      */
-    public static WebDriver getDriver(){
+    public static WebDriver getDriver() {
 
-        if(driverPool.get() == null){
+        if (driverPool.get() == null) {
 
             /*
             We will read our browserType from configuration.properties file.
             This way, we can control which browser is opened from outside our code.
              */
-            String browserType="";
+            String browserType = "";
             if (System.getProperty("BROWSER") == null) {
                 browserType = ConfigurationReader.getProperty("browser");
             } else {
@@ -49,12 +48,12 @@ public class Driver {
             Depending on the browserType returned from the configuration.properties
             switch statement will determine the "case", and open the matching browser.
              */
-            switch (browserType){
+            switch (browserType) {
                 case "remote-chrome":
                     try {
                         // assign your grid server address
                         String gridAddress = "3.80.83.183";
-                        URL url = new URL("http://"+ gridAddress + ":4444/wd/hub");
+                        URL url = new URL("http://" + gridAddress + ":4444/wd/hub");
                         ChromeOptions chromeOptions = new ChromeOptions();
                         chromeOptions.addArguments("--start-maximized");
                         driverPool.set(new RemoteWebDriver(url, chromeOptions));
@@ -68,8 +67,8 @@ public class Driver {
                     try {
                         // assign your grid server address
                         String gridAddress = "34.239.154.115";
-                        URL url = new URL("http://"+ gridAddress + ":4444/wd/hub");
-                        FirefoxOptions firefoxOptions=new FirefoxOptions();
+                        URL url = new URL("http://" + gridAddress + ":4444/wd/hub");
+                        FirefoxOptions firefoxOptions = new FirefoxOptions();
                         firefoxOptions.addArguments("--start-maximized");
                         driverPool.set(new RemoteWebDriver(url, firefoxOptions));
                         //driverPool.set(new RemoteWebDriver(new URL("http://0.0.0.0:4444/wd/hub"),desiredCapabilities));
@@ -91,7 +90,7 @@ public class Driver {
                     driverPool.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
                     break;
                 case "headless-chrome":
-                   // WebDriverManager.chromedriver().setup();
+                    // WebDriverManager.chromedriver().setup();
                     ChromeOptions option = new ChromeOptions();
                     option.addArguments("--headless=new");
                     driverPool.set(new ChromeDriver(option));
@@ -109,8 +108,8 @@ public class Driver {
     /*
     Create a new Driver.closeDriver(); it will use .quit() method to quit browsers, and then set the driver value back to null.
      */
-    public static void closeDriver(){
-        if (driverPool.get()!=null){
+    public static void closeDriver() {
+        if (driverPool.get() != null) {
             /*
             This line will terminate the currently existing driver completely. It will not exist going forward.
              */
